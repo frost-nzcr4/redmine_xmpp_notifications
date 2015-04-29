@@ -2,8 +2,15 @@ class NotifierHook < Redmine::Hook::Listener
   
 #TODO: it is plans to rename hooks in upstream
   def controller_issues_new_after_save(context={})
-    redmine_url = "#{Setting[:protocol]}://#{Setting[:host_name]}"
     issue = context[:issue]
+    deliver "new", issue
+  end
+
+  def controller_issues_edit_after_save(context={})
+    issue = context[:issue]
+    journal = context[:journal]
+    deliver "edit", issue, journal
+  end
 
     text = l(:xmpp_issue_created) + " ##{issue.id}\n\n"
     text += l(:field_author) + ": #{issue.author.name}\n" 
