@@ -96,8 +96,10 @@ class NotifierHook < Redmine::Hook::Listener
       end
     rescue Jabber::JabberError, SocketError => e
       Rails.logger.error "#{e.class} (#{e.message})"
+    ensure
+      sleep 2  # Wait before disconnect otherwise last message could be lost.
+      client.disconnect unless client.nil?
     end
-    client = nil
   end
   
 end
