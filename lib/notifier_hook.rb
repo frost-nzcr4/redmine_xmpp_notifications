@@ -85,6 +85,9 @@ class NotifierHook < Redmine::Hook::Listener
       
       notified = User.active
       
+      jids = notified.collect(&:xmpp_jid).flatten.compact
+      Rails.logger.info "Sending XMPP notification to: #{jids.join(', ')}"
+      
       notified.each do |user|
         if user.xmpp_jid.nil? || user.xmpp_jid == "" || !user.notify_about?(issue)
           next
