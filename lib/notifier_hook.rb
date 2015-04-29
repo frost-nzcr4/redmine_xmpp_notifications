@@ -74,14 +74,21 @@ class NotifierHook < Redmine::Hook::Listener
   private
   
   
+  # Deliver the message to users.
+  #
+  # @param message  [String] A text to deliver.
+  # @param issue [Issue] An issue that triggers the hook.
   def deliver(message, issue)
     config = Setting.plugin_redmine_xmpp_notifications
     begin
       client = Jabber::Simple.new config["jid"], config["jidpassword"]
-      User.active.each do |user|
-      	if user.xmpp_jid.nil? || user.xmpp_jid == "" || !user.notify_about?(issue)
-	  next
-	end
+      
+      notified = User.active
+      
+      notified.each do |user|
+        if user.xmpp_jid.nil? || user.xmpp_jid == "" || !user.notify_about?(issue)
+          next
+        end
         client.deliver user.xmpp_jid, message
       end
     rescue Jabber::JabberError, SocketError => e
