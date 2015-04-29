@@ -74,10 +74,12 @@ class NotifierHook < Redmine::Hook::Listener
   def deliver(type, issue, journal = nil)
     config = Setting.plugin_redmine_xmpp_notifications
     begin
-      users = notified_users issue
+      # Start from Redmine 2.2.0 there are notified_users and notified_watchers methods.
+      # This code is adopted from `deliver_issue_add` method in redmine/app/models/mailer.rb.
+      users = issue.notified_users
       watchers = []
       if config["send_to_watchers"]
-        watchers = notified_watchers issue
+        watchers = issue.notified_watchers
       end
       
       notified = (users + watchers).uniq
@@ -101,50 +103,5 @@ class NotifierHook < Redmine::Hook::Listener
         client.disconnect  # TODO: Messages must be stored in the queue. Disconnect when queue is empty or set global Jabber instance: connect on Rails app initialization and disconnect on app stop.
       end
     end
-  end
-  
-  # Get users who should be notified.
-  #
-  # It mimics the `issue`.`notified_users`.
-  #
-  # @param issue [Issue] An issue that triggers the hook.
-  # @return [Array<User>] List with users to notify.
-  def notified_users(issue)
-    # == issue.notified_users
-    notified = []
-    # Author and assignee are always notified unless they have been
-    # locked or don't want to be notified
-    notified << issue.author if issue.author
-    if issue.assigned_to
-      notified += (issue.assigned_to.is_a?(Group) ? issue.assigned_to.users : [issue.assigned_to])
-    end
-    if issue.assigned_to_was
-      notified += (issue.assigned_to_was.is_a?(Group) ? issue.assigned_to_was.users : [issue.assigned_to_was])
-    end
-    notified = notified.select {|u| u.active? && u.notify_about?(issue)}
-    
-    notified += issue.project.notified_users
-    
-    notified.uniq!
-    # Remove users that can not view the issue
-    notified.reject! {|user| !issue.visible?(user)}
-    notified
-  end
-  
-  # Get users who should be notified.
-  #
-  # It mimics the `acts_as_watchable`.`notified_watchers`.
-  #
-  # @param issue [Issue] An issue that triggers the hook.
-  # @return [Array<User>] List with watchers to notify.
-  def notified_watchers(issue)
-    # == acts_as_watchable.notified_watchers
-    watchers = issue.watcher_users.active
-    watchers.reject! {|user| user.mail_notification == 'none'}
-    
-    if respond_to?(:visible?)
-      watchers.reject! {|user| !issue.visible?(user)}
-    end
-    watchers
   end
 end
