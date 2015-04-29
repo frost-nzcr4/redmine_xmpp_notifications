@@ -97,4 +97,31 @@ class NotifierHook < Redmine::Hook::Listener
     end
   end
   
+  # Get users who should be notified.
+  #
+  # It mimics the `issue`.`notified_users`.
+  #
+  # @param issue [Issue] An issue that triggers the hook.
+  # @return [Array<User>] List with users to notify.
+  def notified_users(issue)
+    # == issue.notified_users
+    notified = []
+    # Author and assignee are always notified unless they have been
+    # locked or don't want to be notified
+    notified << issue.author if issue.author
+    if issue.assigned_to
+      notified += (issue.assigned_to.is_a?(Group) ? issue.assigned_to.users : [issue.assigned_to])
+    end
+    if issue.assigned_to_was
+      notified += (issue.assigned_to_was.is_a?(Group) ? issue.assigned_to_was.users : [issue.assigned_to_was])
+    end
+    notified = notified.select {|u| u.active? && u.notify_about?(issue)}
+    
+    notified += issue.project.notified_users
+    
+    notified.uniq!
+    # Remove users that can not view the issue
+    notified.reject! {|user| !issue.visible?(user)}
+    notified
+  end
 end
