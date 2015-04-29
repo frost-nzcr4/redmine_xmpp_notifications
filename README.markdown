@@ -5,11 +5,25 @@ Following actions will result in notifications to Jabber:
 
 - Create and update issues
 
-## Installation & Configuration
+## Installation
 
-- The XMPP Notifications Plugin depends on the [Xmpp4r-Simple](http://xmpp4r-simple.rubyforge.org/). This can be installed with:
-    $ sudo gem install xmpp4r-simple
-- Then install the Plugin following the general Redmine [plugin installation instructions](http://www.redmine.org/wiki/redmine/Plugins).
-- Go to the Plugins section of the Administration page, select Configure.
+Run following commands:
+
+```ShellSession
+cd /path/to/redmine
+git clone https://github.com/frost-nzcr4/redmine_xmpp_notifications.git vendor/plugins/redmine_xmpp_notifications
+bundle install
+rake db:migrate_plugins RAILS_ENV=production
+```
+
+## Configuration
+
+- Go to the Plugins section of the Administration page, and select Configure.
 - On this page fill out the Jabber ID and password for user who will sends messages.
-- Restart your Redmine web servers (e.g. mongrel, thin, mod_rails).
+- Restart your Redmine web server (e.g. mongrel, thin, mod_rails).
+
+## Compatibility
+
+Plugin version and environment where it was tested and perfectly works out of the box:
+
+TODO:
