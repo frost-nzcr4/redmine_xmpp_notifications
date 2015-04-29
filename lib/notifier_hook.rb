@@ -84,9 +84,8 @@ class NotifierHook < Redmine::Hook::Listener
 	end
         client.deliver user.xmpp_jid, message
       end
-    rescue
-      ## Error connect XMPP or Error send message
-      # RAILS_DEFAULT_LOGGER.error "XMPP Error: #{$!}"
+    rescue Jabber::JabberError, SocketError => e
+      Rails.logger.error "#{e.class} (#{e.message})"
     end
     client = nil
   end
