@@ -124,4 +124,21 @@ class NotifierHook < Redmine::Hook::Listener
     notified.reject! {|user| !issue.visible?(user)}
     notified
   end
+  
+  # Get users who should be notified.
+  #
+  # It mimics the `acts_as_watchable`.`notified_watchers`.
+  #
+  # @param issue [Issue] An issue that triggers the hook.
+  # @return [Array<User>] List with watchers to notify.
+  def notified_watchers(issue)
+    # == acts_as_watchable.notified_watchers
+    watchers = issue.watcher_users.active
+    watchers.reject! {|user| user.mail_notification == 'none'}
+    
+    if respond_to?(:visible?)
+      watchers.reject! {|user| !issue.visible?(user)}
+    end
+    watchers
+  end
 end
