@@ -77,7 +77,10 @@ class NotifierHook < Redmine::Hook::Listener
       client = Jabber::Simple.new config["jid"], config["jidpassword"]
       
       users = notified_users issue
-      watchers = notified_watchers issue
+      watchers = []
+      if config["send_to_watchers"]
+        watchers = notified_watchers issue
+      end
       
       notified = (users + watchers).uniq
       notified.select {|user| !user.xmpp_jid.nil? && user.xmpp_jid}

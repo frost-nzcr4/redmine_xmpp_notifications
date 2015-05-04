@@ -19,5 +19,5 @@ Redmine::Plugin.register :redmine_xmpp_notifications do
   version "1.0.1"
   url "https://github.com/pmisters/redmine_xmpp_notifications"
   
-  settings :default => {"jid" => "", "password" => ""}, :partial => "settings/xmpp_settings"
+  settings :default => {"jid" => "", "password" => "", "send_to_watchers" => false}, :partial => "settings/xmpp_settings"
 end
