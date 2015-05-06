@@ -3,6 +3,8 @@ require "xmpp4r-simple"
 
 require_dependency "notifier_hook"
 require_dependency "my_account_hooks"
+# Uncomment following line when use Ruby 1.9.
+#require_dependency "project"
 require_dependency "user_hooks"
 require_dependency "user"
 
