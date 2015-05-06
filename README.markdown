@@ -13,7 +13,7 @@ Run following commands:
 cd /path/to/redmine
 git clone --branch v1.1.0 https://github.com/frost-nzcr4/redmine_xmpp_notifications.git vendor/plugins/redmine_xmpp_notifications
 bundle install
-rake db:migrate_plugins RAILS_ENV=production
+rake redmine:plugins:migrate RAILS_ENV=production
 ```
 
 Note:
@@ -42,7 +42,7 @@ Plugin version and environment where it was tested and perfectly works out of th
 
   - redmine 2.0.4, ruby 1.9.3, rubygems 2.4.6, bundler 1.3.6
 
-    Note: see Ruby 1.9 notes in Gemfile and init.rb for workaround.
+    Note: see Ruby 1.9 notes in Gemfile and init.rb for workaround (frost-nzcr4/redmine_xmpp_notifications@4dee1bda731d484d4742006e765df2595c9f9dfd).
 
   - redmine 1.4.2, ruby 1.8.7, rubygems 1.8.15, bundler 1.1.5
 
