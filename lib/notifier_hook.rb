@@ -74,8 +74,6 @@ class NotifierHook < Redmine::Hook::Listener
   def deliver(type, issue, journal = nil)
     config = Setting.plugin_redmine_xmpp_notifications
     begin
-      client = Jabber::Simple.new config["jid"], config["jidpassword"]
-      
       users = notified_users issue
       watchers = []
       if config["send_to_watchers"]
@@ -88,6 +86,8 @@ class NotifierHook < Redmine::Hook::Listener
       jids = notified.collect(&:xmpp_jid).flatten.compact
       Rails.logger.info "Sending XMPP notification to: #{jids.join(', ')}"
       
+      client = (Jabber::Simple.new config["jid"], config["jidpassword"]) if notified
+      
       notified.each do |user|
         set_language_if_valid(user.language)
         message = compose_message type, issue, journal
@@ -96,8 +96,10 @@ class NotifierHook < Redmine::Hook::Listener
     rescue Jabber::JabberError, SocketError => e
       Rails.logger.error "#{e.class} (#{e.message})"
     ensure
-      sleep 2  # Wait before disconnect otherwise last message could be lost.
-      client.disconnect unless client.nil?
+      if client
+        sleep 2  # Wait before disconnect otherwise last message could be lost.
+        client.disconnect  # TODO: Messages must be stored in the queue. Disconnect when queue is empty or set global Jabber instance: connect on Rails app initialization and disconnect on app stop.
+      end
     end
   end
   
