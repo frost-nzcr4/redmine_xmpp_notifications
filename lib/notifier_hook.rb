@@ -98,10 +98,12 @@ class NotifierHook < Redmine::Hook::Listener
     rescue Jabber::JabberError, SocketError => e
       Rails.logger.error "#{e.class} (#{e.message})"
     ensure
-      if client
-        sleep 2  # Wait before disconnect otherwise last message could be lost.
-        client.disconnect  # TODO: Messages must be stored in the queue. Disconnect when queue is empty or set global Jabber instance: connect on Rails app initialization and disconnect on app stop.
-      end
+      # TODO: Messages must be stored in the queue. Disconnect when queue is empty or set global Jabber instance: connect on Rails app initialization and disconnect on app stop.
+      client = nil  # This not disconnect client from XMPP, so delivery always done and memory can leak?
+      #if client
+      #  sleep 2  # Wait before disconnect otherwise last message could be lost.
+      #  client.disconnect
+      #end
     end
   end
 end
