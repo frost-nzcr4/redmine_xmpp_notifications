@@ -1,5 +1,15 @@
 # coding: UTF-8
 
+=== 1.0.2 / 2015-05-06
+
+Minor enhancements:
+
+* Connect to XMPP only when notified users list is not empty
+
+Bug fixes:
+
+* Sleep only when client is connected.
+
 === 1.0.1 / 2015-05-04
 
 Minor enhancements:

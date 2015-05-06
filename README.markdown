@@ -26,6 +26,6 @@ rake db:migrate_plugins RAILS_ENV=production
 
 Plugin version and environment where it was tested and perfectly works out of the box:
 
-- v1.0.1
+- v1.0.2
 
   redmine 1.4.2, ruby 1.8.7, rubygems 1.8.15, bundler 1.1.5
