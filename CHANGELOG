@@ -1,5 +1,15 @@
 # coding: UTF-8
 
+=== 1.2.0 / 2015-05-06
+
+Minor enhancements:
+
+* Break backward compatibility with Redmine < 2.2.0.
+
+Bug fixes:
+
+* May no deliver when disconnect.
+
 === 1.1.0 / 2015-05-06
 
 Minor enhancements:
