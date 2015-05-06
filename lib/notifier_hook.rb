@@ -74,13 +74,13 @@ class NotifierHook < Redmine::Hook::Listener
   def deliver(type, issue, journal = nil)
     config = Setting.plugin_redmine_xmpp_notifications
     begin
-      client = Jabber::Simple.new config["jid"], config["jidpassword"]
-      
       notified = User.active
       
       jids = notified.collect(&:xmpp_jid).flatten.compact
       Rails.logger.info "Sending XMPP notification to: #{jids.join(', ')}"
-      
+
+      client = (Jabber::Simple.new config["jid"], config["jidpassword"]) if notified
+
       notified.each do |user|
         if user.xmpp_jid.nil? || user.xmpp_jid == "" || !user.notify_about?(issue)
           next
