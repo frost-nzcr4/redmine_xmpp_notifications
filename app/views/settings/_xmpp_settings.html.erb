@@ -1,5 +1,5 @@
 <fieldset>
-  <legend><%= l(:xmpp_label_settings) %></legend>
+  <legend><%= l(:xmpp_label_connection_settings) %></legend>
   <p>
     <label><%= l(:xmpp_label_jid) %></label>
     <%= text_field_tag "settings[jid]", @settings["jid"] %>
@@ -9,4 +9,11 @@
     <label><%= l(:xmpp_label_password) %></label>
     <%= password_field_tag "settings[jidpassword]", @settings["jidpassword"] %>
   </p>
+</fieldset>
+<fieldset>
+  <legend><%= l(:xmpp_label_notification_settings) %></legend>
+  <p>
+    <label><%= l(:xmpp_label_send_to_watchers) %></label>
+    <%= check_box_tag "settings[send_to_watchers]", true, @settings["send_to_watchers"] %>
+  </p>  
 </fieldset>

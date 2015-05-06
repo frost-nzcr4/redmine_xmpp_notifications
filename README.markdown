@@ -11,9 +11,21 @@ Run following commands:
 
 ```ShellSession
 cd /path/to/redmine
-git clone --branch v1.0.1 https://github.com/frost-nzcr4/redmine_xmpp_notifications.git vendor/plugins/redmine_xmpp_notifications
+git clone --branch v1.1.0 https://github.com/frost-nzcr4/redmine_xmpp_notifications.git vendor/plugins/redmine_xmpp_notifications
 bundle install
 rake db:migrate_plugins RAILS_ENV=production
+```
+
+Note:
+
+  Older `git` releases cannot checkout tag with `--branch` option, so one's need to run
+  additional commands instead of `git clone --branch`:
+
+```ShellSession
+git clone https://github.com/frost-nzcr4/redmine_xmpp_notifications.git vendor/plugins/redmine_xmpp_notifications
+cd vendor/plugins/redmine_xmpp_notifications
+git checkout v1.1.0
+cd ../../..
 ```
 
 ## Configuration
@@ -26,6 +38,14 @@ rake db:migrate_plugins RAILS_ENV=production
 
 Plugin version and environment where it was tested and perfectly works out of the box:
 
+- v1.1.0
+
+  - redmine 2.0.4, ruby 1.9.3, rubygems 2.4.6, bundler 1.3.6
+
+    Note: see Ruby 1.9 notes in Gemfile and init.rb for workaround.
+
+  - redmine 1.4.2, ruby 1.8.7, rubygems 1.8.15, bundler 1.1.5
+
 - v1.0.2
 
-  redmine 1.4.2, ruby 1.8.7, rubygems 1.8.15, bundler 1.1.5
+  - redmine 1.4.2, ruby 1.8.7, rubygems 1.8.15, bundler 1.1.5
